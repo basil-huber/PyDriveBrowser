@@ -6,7 +6,7 @@ from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from pydrive2.files import GoogleDriveFile
 
-from url_parser import find_file_id_from_url, find_folder_id_from_url
+from pydrivebrowser.url_parser import find_file_id_from_url, find_folder_id_from_url
 from pick import pick
 
 
