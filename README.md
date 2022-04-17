@@ -15,7 +15,7 @@ To setup credentials (OAuth 2.0 Client IDs) check out the [documentation of PyDr
 
 Demo
 ----
-![demo gif](docs/demo.gif)
+![demo gif](docs/images/demo.gif)
 ```
 from cli_browser import CliBrowser
 
