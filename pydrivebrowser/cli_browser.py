@@ -1,5 +1,4 @@
 import curses
-from math import floor
 from typing import List, Dict
 
 from pydrive2.auth import GoogleAuth
@@ -7,7 +6,7 @@ from pydrive2.drive import GoogleDrive
 from pydrive2.files import GoogleDriveFile
 
 from pydrivebrowser.url_parser import find_file_id_from_url, find_folder_id_from_url
-from pick import pick
+from pick import Picker
 
 
 def is_folder(file: GoogleDriveFile):
@@ -51,6 +50,11 @@ class CliBrowser(GoogleDrive):
         else:
             folder_id = 'root'
 
+        return curses.wrapper(self._select_file, folder_id, file_extension)
+
+    def _select_file(self, screen, folder_id: str, file_extension=None) -> GoogleDriveFile:
+        Picker([''], 'select file').config_curses()  # dummy picker to  configure curses
+
         while True:
             files = [f for f in self.listdir(folder_id) if is_folder(f) or has_file_extension(f, file_extension)]
             default_index = 0
@@ -60,7 +64,8 @@ class CliBrowser(GoogleDrive):
                 files = [parent] + files
                 if len(files) > 1:
                     default_index = 1
-            file, _ = pick(files, 'select file', default_index=default_index, options_map_func=self._print_file_entry)
+            picker = Picker(files, 'select file', default_index=default_index, options_map_func=self._print_file_entry)
+            file, _ = picker.run_loop(screen)
             if not is_folder(file):
                 return file
             else:
@@ -93,4 +98,3 @@ class CliBrowser(GoogleDrive):
             else:
                 entry += f'  {int(size / (1024 * 1024 * 1024))} GiB'
         return entry
-
