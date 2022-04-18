@@ -1,3 +1,5 @@
+[![Tests](https://github.com/basil-huber/PyDriveBrowser/actions/workflows/tests.yml/badge.svg)](https://github.com/basil-huber/PyDriveBrowser/actions/workflows/tests.yml)
+
 PyDriveBrowser
 ==============
 PyDriveBrowser is a simple Command Line Interface to browse through a Google Drive.
