@@ -13,7 +13,7 @@ Install PyDriveBrowser using pip:
 pip install pydrivebrowser
 ```
 
-To setup credentials (OAuth 2.0 Client IDs) check out the [documentation of PyDrive2](https://docs.iterative.ai/PyDrive2/quickstart/#authentication).
+To setup credentials (OAuth 2.0 Client IDs or Service Account credentials) check out the [documentation of PyDrive2](https://docs.iterative.ai/PyDrive2/quickstart/#authentication).
 
 Demo
 ----
