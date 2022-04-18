@@ -2,7 +2,7 @@
 
 PyDriveBrowser
 ==============
-PyDriveBrowser is a simple Command Line Interface to browse through a Google Drive.
+PyDriveBrowser is a simple Command Line Interface to browse through Google Drive.
 
 It is based on [PyDrive2](https://github.com/iterative/PyDrive2) and [Pick](https://github.com/wong2/pick).
 
