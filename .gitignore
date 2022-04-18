@@ -1,4 +1,8 @@
 __pycache__/
 dist/
 *egg-info/
+
+.idea/
+
 client_secrets.json
+service_account_credentials.json
