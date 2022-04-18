@@ -1,4 +1,4 @@
-[![Tests](https://github.com/basil-huber/PyDriveBrowser/actions/workflows/tests.yml/badge.svg)](https://github.com/basil-huber/PyDriveBrowser/actions/workflows/tests.yml)
+[![Tests](https://github.com/basil-huber/PyDriveBrowser/workflows/Tests/badge.svg)](https://github.com/basil-huber/PyDriveBrowser/actions/workflows/tests.yml) [![PyPi version](https://badgen.net/pypi/v/PyDriveBrowser/)](https://pypi.org/project/PyDriveBrowser)
 
 PyDriveBrowser
 ==============
