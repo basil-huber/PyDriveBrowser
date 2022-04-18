@@ -17,9 +17,11 @@ jobs:
         uses: actions/checkout@master
       - name: Run Unittests
         run: |
+          pip3 install --ignore-installed httplib2
           pip3 install .
-#          cd tests
-#          python3 -m unittest
+          cd tests
+          echo '${{ secrets.SERVICE_ACCOUNT_CREDENTIALS }}' > service_account_credentials.json
+          python3 -m unittest 
 
   update-pypi-remote:
     runs-on: ubuntu-20.04
