@@ -1,12 +1,23 @@
 import curses
 from typing import List, Dict
 
+from pydrive2.files import FileNotUploadedError, GoogleDriveFile
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
-from pydrive2.files import GoogleDriveFile
 
+from pydrivebrowser.stream import GDriveFileReader
 from pydrivebrowser.url_parser import find_file_id_from_url, find_folder_id_from_url
 from pick import Picker
+
+
+class GoogleDriveBinaryFile(GoogleDriveFile):
+    def open(self) -> GDriveFileReader:
+        files = self.auth.service.files()
+        file_id = self.metadata.get("id") or self.get("id")
+        if not file_id:
+            raise FileNotUploadedError()
+        request = self._WrapRequest(files.get_media(fileId=file_id))
+        return GDriveFileReader(request)
 
 
 def is_folder(file: GoogleDriveFile):
@@ -40,7 +51,7 @@ class CliBrowser(GoogleDrive):
         curses.wrapper(lambda std_scr: auth.LocalWebserverAuth())
         return auth
 
-    def select_file(self, url='', file_extension=None) -> GoogleDriveFile:
+    def select_file(self, url='', file_extension=None) -> GoogleDriveBinaryFile:
         if url:
             file_id = find_file_id_from_url(url)
             if file_id:
@@ -52,7 +63,7 @@ class CliBrowser(GoogleDrive):
 
         return curses.wrapper(self._select_file, folder_id, file_extension)
 
-    def _select_file(self, screen, folder_id: str, file_extension=None) -> GoogleDriveFile:
+    def _select_file(self, screen, folder_id: str, file_extension=None) -> GoogleDriveBinaryFile:
         Picker([''], 'select file').config_curses()  # dummy picker to  configure curses
 
         while True:
@@ -67,7 +78,7 @@ class CliBrowser(GoogleDrive):
             picker = Picker(files, 'select file', default_index=default_index, options_map_func=self._print_file_entry)
             file, _ = picker.run_loop(screen)
             if not is_folder(file):
-                return file
+                return self.CreateFile({'id': file['id']})
             else:
                 folder_id = file['id']
 
@@ -98,3 +109,6 @@ class CliBrowser(GoogleDrive):
             else:
                 entry += f'  {int(size / (1024 * 1024 * 1024))} GiB'
         return entry
+
+    def CreateFile(self, metadata=None) -> GoogleDriveBinaryFile:
+        return GoogleDriveBinaryFile(auth=self.auth, metadata=metadata)
