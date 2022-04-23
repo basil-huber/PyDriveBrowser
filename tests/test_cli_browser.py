@@ -43,9 +43,6 @@ class CliBrowserTest(TestCase):
         scope = ["https://www.googleapis.com/auth/drive.file",
                  "https://www.googleapis.com/auth/drive"]
         with open('service_account_credentials.json', 'r') as json_file:
-            # json_dict = json.load(json_file)
-            # json_dict['private_key'] = os.environ['SERVICE_ACCOUNT_PRIVATE_KEY'].replace(r'\n', '\n')
-            # cls.auth.credentials = ServiceAccountCredentials.from_json_keyfile_dict(json_dict, scope)
             cls.auth.credentials = ServiceAccountCredentials.from_json_keyfile_name('service_account_credentials.json',
                                                                                     scope)
 

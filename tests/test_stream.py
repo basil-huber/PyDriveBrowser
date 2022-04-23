@@ -186,7 +186,6 @@ class GDriveFileReaderTest(TestCase):
 
         b = bytearray(150)
         reader.readinto(b)
-        print(len(b))
         self.assertEqual(2, reader.raw._downloader.call_count)
         self.assertEqual(bytes([i for i in range(0, 150)]), b)
 
