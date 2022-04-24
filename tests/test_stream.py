@@ -3,7 +3,7 @@ from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
 from googleapiclient.http import DEFAULT_CHUNK_SIZE, MediaDownloadProgress
-from pydrivebrowser.stream import DownloadStream, GDriveFileReader
+from pydrivebrowser.io_stream import DownloadStream, GDriveFileReader
 
 
 class MockMediaIoBaseDownload:
