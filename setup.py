@@ -6,7 +6,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(name='PyDriveBrowser',
-      version='0.1.5',
+      version='0.1.6',
       description='Command line file Browser for Google Drive',
       long_description=long_description,
       long_description_content_type='text/markdown',
