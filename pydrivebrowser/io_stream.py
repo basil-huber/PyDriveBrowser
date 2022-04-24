@@ -29,6 +29,12 @@ class DownloadStream(io.RawIOBase):
     def readable(self) -> bool:
         return True
 
+    def tell(self) -> int:
+        if self.status:
+            return self.status.resumable_progress
+        else:
+            return 0
+
 
 class GDriveFileReader(io.BufferedReader):
     def __init__(self, request: googleapiclient.http.HttpRequest, buffer_size=DEFAULT_CHUNK_SIZE):

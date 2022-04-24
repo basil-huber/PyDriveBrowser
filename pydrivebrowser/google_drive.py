@@ -52,6 +52,7 @@ class GoogleDriveFileSystem(GoogleDrive):
         if not auth:
             auth = self._authenticate()
         super().__init__(auth)
+        self.auth.Authorize()
 
     def open(self, filename: str) -> GDriveFileReader:
         """
