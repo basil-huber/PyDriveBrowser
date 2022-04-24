@@ -3,7 +3,11 @@ from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
 from googleapiclient.http import DEFAULT_CHUNK_SIZE, MediaDownloadProgress
-from pydrivebrowser.stream import DownloadStream, GDriveFileReader
+from oauth2client.service_account import ServiceAccountCredentials
+from pydrive2.auth import GoogleAuth
+
+from pydrivebrowser.google_drive import GoogleDriveFileSystem
+from pydrivebrowser.io_stream import DownloadStream, GDriveFileReader
 
 
 class MockMediaIoBaseDownload:
@@ -26,8 +30,11 @@ class MockMediaIoBaseDownload:
 
 http_request = MagicMock()
 
+test_file_lines_id = '1Nepia57H0hF6oDUAZpRNtl3xbSTylGUM'
+
 
 class DownloadStreamTest(TestCase):
+
     @patch('googleapiclient.http.MediaIoBaseDownload', MockMediaIoBaseDownload)
     def test_init(self):
         chunksize = 100
@@ -105,6 +112,20 @@ class DownloadStreamTest(TestCase):
 
 
 class GDriveFileReaderTest(TestCase):
+    auth = None
+
+    @classmethod
+    def _authenticate(cls) -> None:
+        cls.auth = GoogleAuth()
+        scope = ["https://www.googleapis.com/auth/drive.file",
+                 "https://www.googleapis.com/auth/drive"]
+        with open('service_account_credentials.json', 'r') as json_file:
+            cls.auth.credentials = ServiceAccountCredentials.from_json_keyfile_name('service_account_credentials.json', scope)
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls._authenticate()
+
     @patch('googleapiclient.http.MediaIoBaseDownload', MockMediaIoBaseDownload)
     def test_init(self):
         buffer_size = 100
@@ -237,3 +258,43 @@ class GDriveFileReaderTest(TestCase):
         b = reader.read1(150)
         self.assertEqual(1, reader.raw._downloader.call_count)
         self.assertEqual(bytes([i for i in range(0, 100)]), b[:100])
+
+    @patch('googleapiclient.http.MediaIoBaseDownload', MockMediaIoBaseDownload)
+    def test_tell(self):
+        buffer_size = 100
+        reader = GDriveFileReader(http_request, buffer_size)
+        reader.raw._downloader._bytes_total = 150
+
+        self.assertEqual(0, reader.tell())
+
+        b = bytearray(50)
+        reader.readinto(b)
+        self.assertEqual(50, reader.tell())
+
+        reader.readinto(b)
+        self.assertEqual(100, reader.tell())
+
+        reader.readinto(b)
+        self.assertEqual(150, reader.tell())
+
+    def test_read(self):
+        gfs = GoogleDriveFileSystem(self.auth)
+        file = gfs.CreateFile({'id': test_file_lines_id})
+
+        reader = file.open()
+        self.assertEqual(b'li', reader.read(2))
+        self.assertEqual(2, reader.tell())
+        self.assertEqual(b'ne', reader.read(2))
+        self.assertEqual(4, reader.tell())
+
+    def test_readline(self):
+        gfs = GoogleDriveFileSystem(self.auth)
+        file = gfs.CreateFile({'id': test_file_lines_id})
+
+        reader = file.open()
+
+        length = 0
+        for i, l in enumerate(reader):
+            self.assertEqual(f'line_{i}\n'.encode(), l)
+            length += len(l)
+            self.assertEqual(length, reader.tell())
