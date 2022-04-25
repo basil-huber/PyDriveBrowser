@@ -50,7 +50,8 @@ class GoogleDriveFileSystem(GoogleDrive):
 
     def __init__(self, auth=None):
         if not auth:
-            auth = self._authenticate()
+            auth = GoogleAuth()
+        self._authenticate(auth)
         super().__init__(auth)
         self.auth.Authorize()
 
@@ -69,11 +70,10 @@ class GoogleDriveFileSystem(GoogleDrive):
         return self.CreateFile({'id': file_id}).open()
 
     @staticmethod
-    def _authenticate() -> GoogleAuth:
-        auth = GoogleAuth()
-        # curses wrapper to avoid spamming the console
-        wrapper(lambda std_scr: auth.LocalWebserverAuth())
-        return auth
+    def _authenticate(auth) -> None:
+        if not auth.credentials:
+            # curses wrapper to avoid spamming the console
+            wrapper(lambda std_scr: auth.LocalWebserverAuth())
 
     def listdir(self, folder_id: str) -> List:
         return self.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
