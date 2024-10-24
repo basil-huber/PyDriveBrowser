@@ -19,7 +19,7 @@ Demo
 ----
 ![demo gif](docs/images/demo.gif)
 ```
-from cli_browser import CliBrowser
+from pydrivebrowser import CliBrowser
 
 c = CliBrowser()
 url = 'https://drive.google.com/drive/folders/1APzr67aMpXSkcMNlA0rWaJHvMoXwb9o8?usp=sharing'
