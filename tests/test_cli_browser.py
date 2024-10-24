@@ -24,10 +24,10 @@ def mock_wrapper(*args, **kwargs):
 def create_mock_run_loop(*file_ids):
     files = file_ids.__iter__()
 
-    def mock_run_loop(self, screen):
+    def mock_run_loop(self, screen, position):
         file_id = next(files)
         for index, option in enumerate(self.options):
-            if option['id'] == file_id:
+            if option.file['id'] == file_id:
                 return option, index
         raise KeyError()
 

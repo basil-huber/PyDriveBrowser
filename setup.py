@@ -17,5 +17,5 @@ setup(name='PyDriveBrowser',
       project_urls={'Bug Tracker': 'https://github.com/basil-huber/PyDriveBrowser/issues'},
       license='Anti-996',
       packages=['pydrivebrowser'],
-      install_requires=['pydrive2', 'pick', 'oauth2client'],
+      install_requires=['pydrive2==1.20.0', 'pick==2.4.0', 'oauth2client==4.1.3'],
       zip_safe=False)
