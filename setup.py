@@ -1,4 +1,5 @@
 from setuptools import setup
+from os import environ
 
 # read the contents of your README file
 from pathlib import Path
@@ -6,7 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(name='PyDriveBrowser',
-      version='0.1.7',
+      version=environ.get('VERSION', '0.0.0').lstrip('v'),
       description='Command line file Browser for Google Drive',
       long_description=long_description,
       long_description_content_type='text/markdown',
