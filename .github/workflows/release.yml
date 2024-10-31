@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@master
       - name: Build and upload to Pypi remote
         env:
-          VERSION: ${{ GITHUB_REF_NAME }}
+          VERSION: $GITHUB_REF_NAME
         run: |
           pip3 install twine
           python3 setup.py sdist
