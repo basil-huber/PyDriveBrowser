@@ -22,3 +22,9 @@ jobs:
           cd tests
           echo '${{ secrets.SERVICE_ACCOUNT_CREDENTIALS }}' > service_account_credentials.json
           python3 -m unittest 
+      - nme: envtest
+        env:
+          VERSION: $GITHUB_REF_NAME
+        run: |
+          echo $VERSION
+
